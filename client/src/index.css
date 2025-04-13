@@ -1,0 +1,168 @@
+@import url("https://fonts.googleapis.com/css2?family=Lilita+One&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Varela+Round&display=swap");
+@import "tailwindcss";
+
+body {
+  font-family: "Varela Round", "Ubuntu", "Lilita One", "Poppins", sans-serif;
+  background-size: cover;
+  background-repeat: none;
+  overflow: hidden;
+  max-width: 100%;
+  width: 100vw;
+  box-sizing: border-box;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+.loader {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(192, 192, 192, 0.538) !important;
+  backdrop-filter: blur(5px) !important;
+}
+
+/* HTML: <div class="loader"></div> */
+.loader1 {
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 8px solid lightblue;
+  border-right-color: orange;
+  animation: l2 1s infinite linear;
+}
+@keyframes l2 {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.modal {
+  background-color: rgba(192, 192, 192, 0.538);
+  backdrop-filter: blur(5px);
+}
+button {
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+
+button:hover {
+  transform: scale(1.1);
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+/* select {
+  cursor: pointer;
+} */
+
+select {
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 16px;
+  outline: none;
+}
+
+select:hover {
+  transform: scale(1.05); /* Slight scale-up */
+  border-color: #888; /* Subtle border color change */
+}
+
+select:focus {
+  border-color: #007bff; /* Focus border color */
+  transform: scale(1.05); /* Keep the scaling effect on focus */
+}
+
+.responsive-td {
+  @apply w-full sm:w-1/2 md:w-1/4 lg:w-1/5 xl:w-1/6 px-6 py-4;
+  word-break: break-word;
+  white-space: normal;
+}
+
+::-webkit-scrollbar {
+  width: 6px; /* Width of the scrollbar */
+  height: 12px; /* Height of the horizontal scrollbar */
+}
+
+/* Style the scrollbar track (the part the thumb slides along) */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Background color of the track */
+  border-radius: 10px; /* Rounded corners */
+}
+
+/* Style the scrollbar thumb (the draggable part) */
+::-webkit-scrollbar-thumb {
+  background: rgb(0, 90, 50); /* Background color of the thumb */
+  border-radius: 10px; /* Rounded corners */
+}
+
+/* Style the scrollbar thumb on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(116, 196, 118); /* Darker background color when hovered */
+}
+
+/* 
+color scheme light to dark
+#f7fcf5
+#e5f5e0
+#c7e9c0
+#a1d99b
+#74c476
+#41ab5d
+#238b45
+#005a32
+ */
+
+
+ /* HTML: <div class="loader"></div> */
+.loader-bar1 {
+  width: 45px;
+  aspect-ratio: .75;
+  --c: no-repeat linear-gradient(#000 0 0);
+  background: 
+    var(--c) 0%   50%,
+    var(--c) 50%  50%,
+    var(--c) 100% 50%;
+  background-size: 20% 60%;
+  animation: l9 1s infinite;
+}
+@keyframes l9 {
+  33% {background-position: 0% 0%  ,50% 100%,100% 0%  }
+  66% {background-position: 0% 100%,50% 0%  ,100% 100%}
+}
+
+
+/* HTML: <div class="loader"></div> */
+.loader-random-spin {
+  width: 50px;
+  aspect-ratio: 1;
+  display: grid;
+  border: 4px solid #0000;
+  border-radius: 50%;
+  border-right-color: #25b09b;
+  animation: l15 1s infinite linear;
+}
+.loader-random-spin::before,
+.loader-random-spin::after {    
+  content: "";
+  grid-area: 1/1;
+  margin: 2px;
+  border: inherit;
+  border-radius: 50%;
+  animation: l15 2s infinite;
+}
+.loader-random-spin::after {
+  margin: 8px;
+  animation-duration: 3s;
+}
+@keyframes l15{ 
+  100%{transform: rotate(1turn)}
+}

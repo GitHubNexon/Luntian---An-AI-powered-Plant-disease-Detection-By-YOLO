@@ -1,0 +1,32 @@
+/* Remove default styles */
+@import "tailwindcss";
+
+
+.react-calendar {
+    width: 100%;
+    max-width: 400px;
+    background: transparent;
+    border: none;
+    font-family: inherit;
+  }
+  
+  /* Header */
+  .react-calendar__navigation {
+    @apply flex justify-between items-center p-2 text-gray-700 font-semibold;
+  }
+  
+  /* Days */
+  .react-calendar__tile {
+    @apply p-3 text-center text-gray-800 rounded-lg transition duration-200 hover:bg-blue-500 hover:text-white;
+  }
+  
+  /* Selected Date */
+  .react-calendar__tile--active {
+    @apply bg-blue-600 text-white;
+  }
+  
+  /* Disable past/future dates */
+  .react-calendar__tile--disabled {
+    @apply text-gray-400 cursor-not-allowed;
+  }
+  
