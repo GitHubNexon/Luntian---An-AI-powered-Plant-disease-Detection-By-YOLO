@@ -5,5 +5,12 @@ pip install ultralytics
 pip install mathplotlib
 pip install torch
 pip install droid
+pip install roboflow
+
+to activate windows
+.\venv\Scripts\Activate.ps1
+
+to linux
+source venv/bin/activate
 
 pip list

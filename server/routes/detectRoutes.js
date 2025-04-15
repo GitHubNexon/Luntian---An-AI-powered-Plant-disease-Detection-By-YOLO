@@ -9,6 +9,9 @@ const {
   undoDeleteDetection,
   undoArchiveDetection,
   permanentDelete,
+  startLiveDetection,
+  stopLiveDetectionAPI,
+  getVideoFeed,
 } = require("../controllers/detectController");
 const { authenticateToken } = require("../controllers/authController");
 
@@ -47,5 +50,17 @@ router.delete(
   authenticateToken,
   permanentDelete
 );
+
+router.post(
+  "/live/start_live_detection",
+  authenticateToken,
+  startLiveDetection
+);
+router.post(
+  "/live/stop_live_detection",
+  authenticateToken,
+  stopLiveDetectionAPI
+);
+router.get("/live/video_feed", getVideoFeed);
 
 module.exports = router;

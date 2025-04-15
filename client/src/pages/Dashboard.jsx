@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { FaUser, FaAddressCard, FaBell, FaChevronDown } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
+import LiveDetection from "../components/LiveDetection";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -41,9 +42,7 @@ const Dashboard = () => {
         <h1 className="text-green-600 text-base sm:text-lg lg:text-xl xl:text-2xl mb-4">
           LUNTIAN
         </h1>
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-         
-        </div>
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-6"></div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
           <InfoCard
             icon={
@@ -64,7 +63,9 @@ const Dashboard = () => {
           <div className="-200 p-4 rounded text-center shadow-2xl cursor-pointer overflow-hidden relative transition-all duration-500 hover:translate-y-2 flex flex-col items-center justify-center gap-2 before:absolute before:w-full hover:before:top-0 before:duration-500 before:-top-1 before:h-1 before:bg-green-400"></div>
         </div>
         <section>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-8 "></div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-8 ">
+            <LiveDetection />
+          </div>
         </section>
       </main>
     </div>

@@ -1,6 +1,8 @@
 require("dotenv").config();
 const axios = require("axios");
 const DetectModel = require("../models/detectModel");
+const { streamLiveDetection, stopStreaming } = require("../utils/videoStream");
+
 
 //single image
 // const createDetection = async (req, res) => {
@@ -457,6 +459,22 @@ const permanentDelete = async (req, res) => {
   }
 };
 
+
+const startLiveDetection = (req, res) => {
+  res.status(200).json({ message: "Live detection started" });
+};
+
+const stopLiveDetectionAPI = (req, res) => {
+  stopStreaming();
+  res.status(200).json({ message: "Live detection stopped" });
+};
+
+const getVideoFeed = (req, res) => {
+  streamLiveDetection(res);
+};
+
+
+
 module.exports = {
   createDetection,
   updateDetection,
@@ -466,4 +484,7 @@ module.exports = {
   undoDeleteDetection,
   undoArchiveDetection,
   permanentDelete,
+  startLiveDetection,
+  stopLiveDetectionAPI,
+  getVideoFeed,
 };
