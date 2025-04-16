@@ -5,6 +5,7 @@ import { FaUser, FaAddressCard, FaBell, FaChevronDown } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import LiveDetection from "../components/LiveDetection";
 import ModelInfo from "../sub-pages/ModelInfo";
+import LiveDetection2 from "../components/LiveDetection2";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -65,7 +66,8 @@ const Dashboard = () => {
         </div>
         <section>
           <div className="flex item-center justify-start ">
-            <LiveDetection />
+            {/* <LiveDetection /> */}
+            <LiveDetection2 />
           </div>
         </section>
         <section>
