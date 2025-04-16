@@ -282,52 +282,61 @@ const DetectionTable = () => {
           ) : (
             <p className="text-center text-gray-600">No results available.</p>
           )}
-          {detection.info && detection.info.length > 0 && (
-  <div className="mt-10">
-    <h4 className="text-xl font-semibold text-[#41ab5d] mb-4">Disease Info</h4>
-    <div className="overflow-x-auto">
-      <table className="min-w-full bg-white border border-gray-200 text-sm text-left">
-        <thead className="bg-[#f2fdf5] text-gray-700 uppercase">
-          <tr>
-            <th className="px-4 py-3 border">Description</th>
-            <th className="px-4 py-3 border">Plants Affected</th>
-            <th className="px-4 py-3 border">Causes & Risk Factors</th>
-            <th className="px-4 py-3 border">Treatment & Management</th>
-            <th className="px-4 py-3 border">Important Notes</th>
-          </tr>
-        </thead>
-        <tbody>
-          {detection.info.map((item, idx) => (
-            <tr key={idx} className="border-t">
-              <td className="px-4 py-3 border text-gray-800">
-                {item.diseaseDescription}
-              </td>
-              <td className="px-4 py-3 border text-gray-800">
-                {Array.isArray(item.plantsAffected)
-                  ? item.plantsAffected.join(", ")
-                  : "N/A"}
-              </td>
-              <td className="px-4 py-3 border text-gray-800">
-                {Array.isArray(item.causesAndRiskFactors)
-                  ? item.causesAndRiskFactors.join(", ")
-                  : "N/A"}
-              </td>
-              <td className="px-4 py-3 border text-gray-800">
-                {Array.isArray(item.treatmentAndManagement)
-                  ? item.treatmentAndManagement.join(", ")
-                  : "N/A"}
-              </td>
-              <td className="px-4 py-3 border text-gray-800">
-                {item.importantNotes}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  </div>
-)}
-
+          {Array.isArray(detection.info) && detection.info.length > 0 ? (
+            <div className="mt-10">
+              <h4 className="text-xl font-semibold text-[#41ab5d] mb-4">
+                Disease Info
+              </h4>
+              <div className="overflow-x-auto">
+                <table className="min-w-full bg-white border border-gray-200 text-sm text-left">
+                  <thead className="bg-[#f2fdf5] text-gray-700 uppercase">
+                    <tr>
+                      <th className="px-4 py-3 border">Description</th>
+                      <th className="px-4 py-3 border">Plants Affected</th>
+                      <th className="px-4 py-3 border">
+                        Causes & Risk Factors
+                      </th>
+                      <th className="px-4 py-3 border">
+                        Treatment & Management
+                      </th>
+                      <th className="px-4 py-3 border">Important Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {detection.info.map((item, idx) => (
+                      <tr key={idx} className="border-t">
+                        <td className="px-4 py-3 border text-gray-800">
+                          {item.diseaseDescription || "N/A"}
+                        </td>
+                        <td className="px-4 py-3 border text-gray-800">
+                          {Array.isArray(item.plantsAffected)
+                            ? item.plantsAffected.join(", ")
+                            : "N/A"}
+                        </td>
+                        <td className="px-4 py-3 border text-gray-800">
+                          {Array.isArray(item.causesAndRiskFactors)
+                            ? item.causesAndRiskFactors.join(", ")
+                            : "N/A"}
+                        </td>
+                        <td className="px-4 py-3 border text-gray-800">
+                          {Array.isArray(item.treatmentAndManagement)
+                            ? item.treatmentAndManagement.join(", ")
+                            : "N/A"}
+                        </td>
+                        <td className="px-4 py-3 border text-gray-800">
+                          {item.importantNotes || "N/A"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ) : (
+            <div className="mt-10 text-center text-gray-600 italic">
+              No disease information available.
+            </div>
+          )}
         </td>
       </tr>
     );
