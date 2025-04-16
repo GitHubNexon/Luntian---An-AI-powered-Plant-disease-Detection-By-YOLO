@@ -9,6 +9,7 @@ const {
   softArchiveUser,
   undoDeleteUser,
   undoArchiveUser,
+  getUserById,
 } = require("../controllers/userController");
 
 const { authenticateToken } = require("../controllers/authController");
@@ -37,6 +38,7 @@ router.post("/undo-delete/:id", authenticateToken, undoDeleteUser);
 // Undo archive on a user
 router.post("/undo-archive/:id", authenticateToken, undoArchiveUser);
 
-
+//get user by id
+router.get("/get-user/:id", authenticateToken, getUserById)
 
 module.exports = router;

@@ -53,34 +53,21 @@ const createUser = async (req, res) => {
   }
 };
 
+const getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-// const updateUser = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const updatedData = req.body;
+    const user = await User.findById(id);
 
-//     const updatedUser = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-//     if (!updatedUser) {
-//       return res.status(404).json({ message: "Record not found" });
-//     }
-
-//     Object.keys(updatedData).forEach((key) => {
-//       if (updatedData[key] !== updatedUser[key]) {
-//         updatedUser[key] = updatedData[key];
-//       }
-//     });
-
-//     updatedUser.__v = updatedUser.__v + 1;
-//     await updatedUser.save();
-
-//     res.status(200).json({ message: "Update User Successfully", updatedUser });
-//   } catch (error) {
-//     res.status(500).json({ message: "Update failed", error: error.message });
-//   }
-// };
-
-
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Get user failed", error: error.message });
+  }
+};
 
 const updateUser = async (req, res) => {
   try {
@@ -94,10 +81,7 @@ const updateUser = async (req, res) => {
     }
 
     // Handle password hashing separately
-    if (
-      updatedData.password &&
-      updatedData.password !== updatedUser.password
-    ) {
+    if (updatedData.password && updatedData.password !== updatedUser.password) {
       updatedUser.password = await generateHash(updatedData.password);
     }
 
@@ -182,7 +166,6 @@ const getAllUsers = async (req, res) => {
     });
   }
 };
-
 
 const softDeleteUser = async (req, res) => {
   try {
@@ -350,4 +333,5 @@ module.exports = {
   softArchiveUser,
   undoDeleteUser,
   undoArchiveUser,
+  getUserById,
 };

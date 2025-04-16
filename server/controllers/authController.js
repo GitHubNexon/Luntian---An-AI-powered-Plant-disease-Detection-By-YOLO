@@ -56,13 +56,13 @@ async function authenticate(req, res) {
     // Set the last login date
     findUser.lastLogin = new Date();
 
-     const newLogin = {
-      ip: ipAddress,
-      device: userAgent.device || "unknown",
-      os: userAgent.os || "unknown",
-      browser: userAgent.browser || 'unknown',
-      loginTime: new Date(),
-    };
+    //  const newLogin = {
+    //   ip: ipAddress,
+    //   device: userAgent.device || "unknown",
+    //   os: userAgent.os || "unknown",
+    //   browser: userAgent.browser || 'unknown',
+    //   loginTime: new Date(),
+    // };
 
     // const previousLogin = findUser.loginHistory?.find(
     //   (login) =>

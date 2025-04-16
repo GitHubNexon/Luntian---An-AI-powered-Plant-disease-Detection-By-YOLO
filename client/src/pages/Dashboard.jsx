@@ -4,6 +4,7 @@ import moment from "moment";
 import { FaUser, FaAddressCard, FaBell, FaChevronDown } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import LiveDetection from "../components/LiveDetection";
+import Profile from "../components/Profile";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -63,8 +64,9 @@ const Dashboard = () => {
           <div className="-200 p-4 rounded text-center shadow-2xl cursor-pointer overflow-hidden relative transition-all duration-500 hover:translate-y-2 flex flex-col items-center justify-center gap-2 before:absolute before:w-full hover:before:top-0 before:duration-500 before:-top-1 before:h-1 before:bg-green-400"></div>
         </div>
         <section>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-8 ">
+          <div className="flex item-center justify-start ">
             <LiveDetection />
+            <Profile />
           </div>
         </section>
       </main>

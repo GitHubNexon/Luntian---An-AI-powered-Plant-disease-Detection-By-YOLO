@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_BASE_URL } from "./config.js";
+import { API_BASE_URL } from "./config.js"
 
 const userApi = {
   getAllUsers: async (
@@ -23,6 +23,13 @@ const userApi = {
     return axios.post(`${API_BASE_URL}/user/create`, userData, {
       withCredentials: true,
     });
+  },
+
+  getUserById: async (id) => {
+    const response = await axios.get(`${API_BASE_URL}/user/get-user/${id}`, {
+      withCredentials: true,
+    });
+    return response.data;
   },
 
   updateUser: async (id, userData) => {
