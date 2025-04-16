@@ -4,7 +4,6 @@ import moment from "moment";
 import { FaUser, FaAddressCard, FaBell, FaChevronDown } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import LiveDetection from "../components/LiveDetection";
-import Profile from "../components/Profile";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -66,7 +65,6 @@ const Dashboard = () => {
         <section>
           <div className="flex item-center justify-start ">
             <LiveDetection />
-            <Profile />
           </div>
         </section>
       </main>
