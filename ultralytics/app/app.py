@@ -11,8 +11,13 @@ load_dotenv()
 
 app = Flask(__name__)
 
+# Get allowed origins from .env and split into list
+cors_origins = os.getenv("CORS_ORIGINS", "").split(",")
 # Enable CORS
-CORS(app, origins="http://localhost:5173", supports_credentials=True)
+
+CORS(app, origins=cors_origins, supports_credentials=True)
+# CORS(app, origins="http://localhost:5173", supports_credentials=True)
+
 
 # Set the MongoDB URI from environment variables
 app.config["MONGO_URI"] = os.getenv("MONGODB_URI")
@@ -21,7 +26,7 @@ app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 mongo = PyMongo(app)
 
 # Register the blueprint for routes
-app.register_blueprint(yolo_v8_routes, url_prefix='/api/yolo_v8')
+app.register_blueprint(yolo_v8_routes, url_prefix='/luntian/api/yolo_v8')
 
 # Basic route to check if the server is running
 @app.route("/api", methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD", ])

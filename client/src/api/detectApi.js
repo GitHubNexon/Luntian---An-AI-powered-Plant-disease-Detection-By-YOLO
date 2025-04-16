@@ -92,42 +92,5 @@ const detectApi = {
       }
     );
   },
-
-  startLiveDetection: async () => {
-    try {
-      const response = await axios.post(
-        `${API_BASE_URL}/detect/live/start_live_detection`,
-        {}, // no body, but you need this if you're passing a config
-        {
-          withCredentials: true,
-        }
-      );
-
-      return response.data;
-    } catch (error) {
-      console.error("Error starting live detection:", error);
-      throw error;
-    }
-  },
-
-  stopLiveDetection: async () => {
-    try {
-      const response = await axios.post(
-        `${API_BASE_URL}/detect/live/stop_live_detection`,
-        {}, // no body, but config goes here
-        {
-          withCredentials: true,
-        }
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error stopping live detection:", error);
-      throw error;
-    }
-  },
-
-  getVideoFeed: () => {
-    return `${API_BASE_URL}/detect/live/video_feed`;
-  },
 };
 export default detectApi;

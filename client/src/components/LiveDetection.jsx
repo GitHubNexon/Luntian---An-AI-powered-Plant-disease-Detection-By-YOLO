@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
-// import detectionApi from "../api/detectionApi";
-import detectApi from "../api/detectApi"
+import liveDetectApi from "../api/liveDetectApi";
 import { FaPlay, FaStop, FaCamera } from "react-icons/fa";
 
 const LiveDetection = () => {
   const [isStreaming, setIsStreaming] = useState(false);
-  const imgRef = useRef(null);
+  const imgRef = useRef(null); // Reference to the image element
 
   const startStream = async () => {
     try {
-      await detectApi.startLiveDetection();
+      await liveDetectApi.startLiveDetection();
       setIsStreaming(true);
     } catch (error) {
       console.error("Error starting live detection:", error);
@@ -18,7 +17,7 @@ const LiveDetection = () => {
 
   const stopStream = async () => {
     try {
-      await detectApi.stopLiveDetection();
+      await liveDetectApi.stopLiveDetection();
       setIsStreaming(false);
     } catch (error) {
       console.error("Error stopping live detection:", error);
@@ -79,11 +78,11 @@ const LiveDetection = () => {
       <h1 className="text-3xl font-semibold  mb-6">
         Live Plant Disease Detection
       </h1>
-      <div className="flex flex-col items-center bg-white shadow-lg rounded-lg p-6 w-full max-w-lg modeDiv">
+      <div className="flex flex-col items-center bg-white shadow-lg rounded-lg p-6 w-full ">
         {isStreaming ? (
           <img
             ref={imgRef}
-            src={`${detectApi.getVideoFeed()}?t=${new Date().getTime()}`}
+            src={`${liveDetectApi.getVideoFeed()}?t=${new Date().getTime()}`}
             alt="Live Object Detection Feed"
             className="w-full h-full border-2 border-black rounded-md"
             crossOrigin="Anonymous"

@@ -64,21 +64,21 @@ async function authenticate(req, res) {
       loginTime: new Date(),
     };
 
-    const previousLogin = findUser.loginHistory?.find(
-      (login) =>
-        login.device === newLogin.device &&
-        login.os === newLogin.os &&
-        login.browser === newLogin.browser
-    );
+    // const previousLogin = findUser.loginHistory?.find(
+    //   (login) =>
+    //     login.device === newLogin.device &&
+    //     login.os === newLogin.os &&
+    //     login.browser === newLogin.browser
+    // );
 
-    if (!previousLogin) {
-      console.log("Sending login notification to:", findUser.email);
-      await sendLoginNotification(findUser.email, newLogin, previousLogin);
-      console.log("Login notification sent.");
-    }
+    // if (!previousLogin) {
+    //   console.log("Sending login notification to:", findUser.email);
+    //   await sendLoginNotification(findUser.email, newLogin, previousLogin);
+    //   console.log("Login notification sent.");
+    // }
 
-    findUser.loginHistory = findUser.loginHistory || [];
-    findUser.loginHistory.push(newLogin);
+    // findUser.loginHistory = findUser.loginHistory || [];
+    // findUser.loginHistory.push(newLogin);
 
     await findUser.save(); 
 
@@ -116,55 +116,6 @@ async function authenticate(req, res) {
   }
 }
 
-// //middleware for login tracker
-// async function sendLoginNotification(email, loginDetails, previousLogin) {
-//   const transporter = nodemailer.createTransport({
-//     service: "gmail",
-//     auth: {
-//       user: process.env.EMAIL_USER,
-//       pass: process.env.EMAIL_PASS,
-//     },
-//   });
-
-//   // Check if the login is from the same device or a new one
-//   let subject, text;
-
-//   if (previousLogin) {
-//     // If the device and IP match, it's the same device
-//     subject = "Login Successful";
-//     text = `You have successfully logged in from the following device:\n
-//     - IP Address: ${loginDetails.ip}
-//     - Device: ${loginDetails.device}
-//     - OS: ${loginDetails.os}
-//     - Browser: ${loginDetails.browser}
-//     - Time: ${loginDetails.loginTime}\n
-//     If this wasn't you, please change your password immediately.`;
-//   } else {
-//     // If the device and IP don't match, it's a new device
-//     subject = "New Login Detected";
-//     text = `A new login was detected from a different device:\n
-//     - IP Address: ${loginDetails.ip}
-//     - Device: ${loginDetails.device}
-//     - OS: ${loginDetails.os}
-//     - Browser: ${loginDetails.browser}
-//     - Time: ${loginDetails.loginTime}\n
-//     If this wasn't you, please change your password immediately.`;
-//   }
-
-//   const mailOptions = {
-//     from: process.env.EMAIL_USER,
-//     to: email,
-//     subject: subject,
-//     text: text,
-//   };
-
-//   try {
-//     await transporter.sendMail(mailOptions);
-//     console.log("Login notification email sent to", email);
-//   } catch (error) {
-//     console.error("Error sending email:", error);
-//   }
-// }
 
 
 

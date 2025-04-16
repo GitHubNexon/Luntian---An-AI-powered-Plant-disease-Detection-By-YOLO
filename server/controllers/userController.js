@@ -53,25 +53,34 @@ const createUser = async (req, res) => {
   }
 };
 
+
 // const updateUser = async (req, res) => {
 //   try {
 //     const { id } = req.params;
 //     const updatedData = req.body;
 
-//     const updatedUser = await User.findByIdAndUpdate(id, updatedData, {
-//       new: true,
-//       runValidators: true,
-//     });
+//     const updatedUser = await User.findById(id);
 
 //     if (!updatedUser) {
 //       return res.status(404).json({ message: "Record not found" });
 //     }
+
+//     Object.keys(updatedData).forEach((key) => {
+//       if (updatedData[key] !== updatedUser[key]) {
+//         updatedUser[key] = updatedData[key];
+//       }
+//     });
+
+//     updatedUser.__v = updatedUser.__v + 1;
+//     await updatedUser.save();
 
 //     res.status(200).json({ message: "Update User Successfully", updatedUser });
 //   } catch (error) {
 //     res.status(500).json({ message: "Update failed", error: error.message });
 //   }
 // };
+
+
 
 const updateUser = async (req, res) => {
   try {
@@ -84,8 +93,17 @@ const updateUser = async (req, res) => {
       return res.status(404).json({ message: "Record not found" });
     }
 
+    // Handle password hashing separately
+    if (
+      updatedData.password &&
+      updatedData.password !== updatedUser.password
+    ) {
+      updatedUser.password = await generateHash(updatedData.password);
+    }
+
+    // Update other fields
     Object.keys(updatedData).forEach((key) => {
-      if (updatedData[key] !== updatedUser[key]) {
+      if (key !== "password" && updatedData[key] !== updatedUser[key]) {
         updatedUser[key] = updatedData[key];
       }
     });

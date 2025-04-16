@@ -183,7 +183,7 @@ node_modules
 dist
 dist-ssr
 *.local
-# .env
+.env
 server/uploads*
 
 # Editor directories and files
