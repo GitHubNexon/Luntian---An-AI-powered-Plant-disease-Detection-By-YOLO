@@ -5,6 +5,7 @@ import Dialog from "../components/Dialog";
 import detectApi from "../api/detectApi";
 import { showToast } from "../utils/toastNotifications";
 import SubmitLoader from "../components/SubmitLoader";
+import { useAuth } from "../contexts/AuthContext";
 
 import ImageUpload from "../components/ImageUpload";
 
@@ -15,6 +16,7 @@ export const DetectionFormModal = ({
   initialData = null,
   mode = "add",
 }) => {
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     plantName: "",
     description: "",
@@ -23,6 +25,7 @@ export const DetectionFormModal = ({
       isDeleted: false,
       isArchived: false,
     },
+    createdBy: user._id,
   });
   const imageUploadRef = useRef(null);
   const [showCloseDialog, setShowCloseDialog] = useState(false);
@@ -50,11 +53,12 @@ export const DetectionFormModal = ({
       setFormData({
         plantName: initialData.plantName || "",
         description: initialData.description || "",
-        images: initialData.images || [], // just base64s
+        images: initialData.images || [],
         status: {
           isDeleted: initialData.status?.isDeleted || false,
           isArchived: initialData.status?.isArchived || false,
         },
+        createdBy: user._id,
       });
 
       setUploadImages(transformedImages); // this is what ImageUpload consumes
@@ -121,6 +125,11 @@ export const DetectionFormModal = ({
           plantName: "",
           description: "",
           images: [],
+          status: {
+            isDeleted: false,
+            isArchived: false,
+          },
+          createdBy: user._id,
         });
         imageUploadRef.current?.reset();
       }
@@ -147,6 +156,7 @@ export const DetectionFormModal = ({
         isDeleted: false,
         isArchived: false,
       },
+      createdBy: user._id,
     });
     imageUploadRef.current?.reset();
     close();

@@ -1,78 +1,16 @@
 require("dotenv").config();
 const axios = require("axios");
+const User = require("../models/userModel");
 const DetectModel = require("../models/detectModel");
 const { OpenAI } = require("openai");
 const openai = new OpenAI({
   baseURL: "https://api.groq.com/openai/v1",
-  apiKey: process.env.GROQ_API_KEY, 
+  apiKey: process.env.GROQ_API_KEY,
 });
-
-
-// const createDetection = async (req, res) => {
-//   try {
-//     const { plantName, description, images, status } = req.body;
-
-//     if (!images || !Array.isArray(images) || images.length === 0) {
-//       return res
-//         .status(400)
-//         .json({ error: "An array of base64 image strings is required" });
-//     }
-
-//     const baseURL = process.env.ROBOFLOW_MODEL_URL;
-//     const apiKey = process.env.ROBOFLOW_API_KEY;
-
-//     const annotatedImages = [];
-//     const results = [];
-
-//     for (const image of images) {
-//       const jsonResponse = await axios.post(
-//         `${baseURL}?api_key=${apiKey}&format=json`,
-//         image,
-//         {
-//           headers: {
-//             "Content-Type": "application/x-www-form-urlencoded",
-//           },
-//         }
-//       );
-
-//       const imageResponse = await axios.post(
-//         `${baseURL}?api_key=${apiKey}&format=image&labels=on&confidence=0&max_predictions=20`,
-//         image,
-//         {
-//           headers: {
-//             "Content-Type": "application/x-www-form-urlencoded",
-//           },
-//           responseType: "arraybuffer",
-//         }
-//       );
-
-//       const base64AnnotatedImage = `data:image/jpeg;base64,${Buffer.from(
-//         imageResponse.data,
-//         "binary"
-//       ).toString("base64")}`;
-
-//       annotatedImages.push(base64AnnotatedImage);
-//       results.push(jsonResponse.data);
-//     }
-
-//     const detection = await DetectModel.create({
-//       plantName,
-//       description,
-//       status,
-//       images: annotatedImages, // ✅ now filled
-//       results,
-//     });
-
-//     res.status(201).json({ message: "Detection created", data: detection });
-//   } catch (error) {
-//     console.error("Detection Error:", error.message);
-//     res.status(500).json({ error: "Detection failed", details: error.message });
-//   }
-// };
 
 const createDetection = async (req, res) => {
   try {
-    const { plantName, description, images, status } = req.body;
+    const { plantName, description, images, status, createdBy } = req.body;
 
     if (!images || !Array.isArray(images) || images.length === 0) {
       return res
@@ -119,8 +57,8 @@ const createDetection = async (req, res) => {
 
     // Extract unique disease names
     const diseaseSet = new Set();
-    results.forEach(result => {
-      result.predictions?.forEach(prediction => {
+    results.forEach((result) => {
+      result.predictions?.forEach((prediction) => {
         if (prediction.class) {
           diseaseSet.add(prediction.class);
         }
@@ -161,10 +99,11 @@ const createDetection = async (req, res) => {
     const detection = await DetectModel.create({
       plantName,
       description,
-      status, 
+      status,
       images: annotatedImages,
       results,
       info,
+      createdBy,
     });
 
     res.status(201).json({ message: "Detection created", data: detection });
@@ -173,90 +112,6 @@ const createDetection = async (req, res) => {
     res.status(500).json({ error: "Detection failed", details: error.message });
   }
 };
-
-
-// const updateDetection = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const updatedData = req.body;
-
-//     // Fetch the document
-//     const updatedDetection = await DetectModel.findById(id);
-
-//     if (!updatedDetection) {
-//       return res.status(404).json({ error: "Detection not found" });
-//     }
-
-//     // If new images are provided, run them through Roboflow just like in createDetection
-//     if (
-//       updatedData.images &&
-//       Array.isArray(updatedData.images) &&
-//       updatedData.images.length > 0
-//     ) {
-//       const baseURL = process.env.ROBOFLOW_MODEL_URL;
-//       const apiKey = process.env.ROBOFLOW_API_KEY;
-
-//       const annotatedImages = [];
-//       const results = [];
-
-//       for (const image of updatedData.images) {
-//         const jsonResponse = await axios.post(
-//           `${baseURL}?api_key=${apiKey}&format=json`,
-//           image,
-//           {
-//             headers: {
-//               "Content-Type": "application/x-www-form-urlencoded",
-//             },
-//           }
-//         );
-
-//         const imageResponse = await axios.post(
-//           `${baseURL}?api_key=${apiKey}&format=image&labels=on&confidence=0&max_predictions=20`,
-//           image,
-//           {
-//             headers: {
-//               "Content-Type": "application/x-www-form-urlencoded",
-//             },
-//             responseType: "arraybuffer",
-//           }
-//         );
-
-//         const base64AnnotatedImage = `data:image/jpeg;base64,${Buffer.from(
-//           imageResponse.data,
-//           "binary"
-//         ).toString("base64")}`;
-
-//         annotatedImages.push(base64AnnotatedImage);
-//         results.push(jsonResponse.data);
-//       }
-
-//       updatedDetection.images = annotatedImages;
-//       updatedDetection.results = results;
-//     }
-
-//     // Update other fields except images and results
-//     Object.keys(updatedData).forEach((key) => {
-//       if (
-//         key !== "images" &&
-//         key !== "results" &&
-//         updatedData[key] !== updatedDetection[key]
-//       ) {
-//         updatedDetection[key] = updatedData[key];
-//       }
-//     });
-
-//     // Save the document with automatic version handling
-//     await updatedDetection.save();
-
-//     res.status(200).json({
-//       message: "Update Detection Successfully",
-//       updatedDetection,
-//     });
-//   } catch (error) {
-//     console.error("Update Error:", error.message);
-//     res.status(500).json({ error: "Update failed", details: error.message });
-//   }
-// };
 
 const updateDetection = async (req, res) => {
   try {
@@ -319,8 +174,8 @@ const updateDetection = async (req, res) => {
 
       // 🔍 Extract disease classes and fetch new info from LLM
       const diseaseSet = new Set();
-      results.forEach(result => {
-        result.predictions?.forEach(pred => {
+      results.forEach((result) => {
+        result.predictions?.forEach((pred) => {
           if (pred.class) diseaseSet.add(pred.class);
         });
       });
@@ -359,8 +214,14 @@ const updateDetection = async (req, res) => {
       if (key !== "images" && key !== "results" && key !== "info") {
         if (key === "status" && typeof updatedData.status === "object") {
           updatedDetection.status = {
-            isDeleted: updatedData.status.isDeleted ?? updatedDetection.status?.isDeleted ?? false,
-            isArchived: updatedData.status.isArchived ?? updatedDetection.status?.isArchived ?? false,
+            isDeleted:
+              updatedData.status.isDeleted ??
+              updatedDetection.status?.isDeleted ??
+              false,
+            isArchived:
+              updatedData.status.isArchived ??
+              updatedDetection.status?.isArchived ??
+              false,
           };
         } else {
           updatedDetection[key] = updatedData[key];
@@ -384,7 +245,6 @@ const updateDetection = async (req, res) => {
     res.status(500).json({ error: "Update failed", details: error.message });
   }
 };
-
 
 const getAllDetection = async (req, res) => {
   try {
@@ -414,6 +274,7 @@ const getAllDetection = async (req, res) => {
 
     const totalItems = await DetectModel.countDocuments(query);
     const detections = await DetectModel.find(query)
+      .populate("createdBy")
       .sort(sortCriteria)
       .skip((page - 1) * limit)
       .limit(limit);
@@ -614,9 +475,6 @@ const permanentDelete = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
-
-
 
 module.exports = {
   createDetection,

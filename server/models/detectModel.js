@@ -13,6 +13,10 @@ const detectModelSchema = new mongoose.Schema(
     info: { type: mongoose.Schema.Types.Mixed },
     results: { type: mongoose.Schema.Types.Mixed },
     status: { type: StatusSchema, required: false },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true }
 );
