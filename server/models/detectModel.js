@@ -9,9 +9,8 @@ const detectModelSchema = new mongoose.Schema(
   {
     plantName: { type: String, required: true },
     description: { type: String },
-    // image: { type: String },
     images: { type: [String] },
-
+    info: { type: mongoose.Schema.Types.Mixed },
     results: { type: mongoose.Schema.Types.Mixed },
     status: { type: StatusSchema, required: false },
   },

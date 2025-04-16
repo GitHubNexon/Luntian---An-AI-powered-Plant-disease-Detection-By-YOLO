@@ -1,7 +1,0 @@
-
-
-
-module.exports = {
-  streamLiveDetection,
-  stopStreaming,
-};

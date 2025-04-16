@@ -1,0 +1,28 @@
+{
+  "diseaseDescription": "Anthracnose is a fungal disease that affects the leaves, stems, and fruits of plants, causing dark, sunken lesions and premature defoliation.",
+  "plantsAffected": [
+    "Tomato",
+    "Pepper",
+    "Cucurbits",
+    "Grapes",
+    "Avocado",
+    "Mango"
+  ],
+  "causesAndRiskFactors": [
+    "High humidity",
+    "Warm temperatures",
+    "Overwatering",
+    "Poor air circulation",
+    "Contaminated soil",
+    "Insect vectors"
+  ],
+  "treatmentAndManagement": [
+    "Remove infected plant parts",
+    "Improve air circulation",
+    "Reduce humidity",
+    "Water carefully",
+    "Apply fungicides",
+    "Prune plants to promote healthy growth"
+  ],
+  "importantNotes": "Anthracnose can be seed-borne, so using disease-free seeds and maintaining proper sanitation practices are crucial in preventing the spread of the disease."
+}

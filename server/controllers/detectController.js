@@ -1,56 +1,69 @@
 require("dotenv").config();
 const axios = require("axios");
 const DetectModel = require("../models/detectModel");
-const { streamLiveDetection, stopStreaming } = require("../utils/videoStream");
+const { OpenAI } = require("openai");
+const openai = new OpenAI({
+  baseURL: "https://api.groq.com/openai/v1",
+  apiKey: process.env.GROQ_API_KEY, 
+});
 
 
-//single image
 // const createDetection = async (req, res) => {
 //   try {
-//     const { plantName, description, image, status } = req.body;
+//     const { plantName, description, images, status } = req.body;
 
-//     if (!image) {
-//       return res.status(400).json({ error: "Image base64 string is required" });
+//     if (!images || !Array.isArray(images) || images.length === 0) {
+//       return res
+//         .status(400)
+//         .json({ error: "An array of base64 image strings is required" });
 //     }
 
 //     const baseURL = process.env.ROBOFLOW_MODEL_URL;
 //     const apiKey = process.env.ROBOFLOW_API_KEY;
 
-//     const jsonResponse = await axios.post(
-//       `${baseURL}?api_key=${apiKey}&format=json`,
-//       image,
-//       {
-//         headers: {
-//           "Content-Type": "application/x-www-form-urlencoded",
-//         },
-//       }
-//     );
+//     const annotatedImages = [];
+//     const results = [];
 
-//     const imageResponse = await axios.post(
-//       `${baseURL}?api_key=${apiKey}&format=image&labels=on&confidence=0&max_predictions=20`,
-//       image,
-//       {
-//         headers: {
-//           "Content-Type": "application/x-www-form-urlencoded",
-//         },
-//         responseType: "arraybuffer",
-//       }
-//     );
+//     for (const image of images) {
+//       const jsonResponse = await axios.post(
+//         `${baseURL}?api_key=${apiKey}&format=json`,
+//         image,
+//         {
+//           headers: {
+//             "Content-Type": "application/x-www-form-urlencoded",
+//           },
+//         }
+//       );
 
-//     const base64AnnotatedImage = `data:image/jpeg;base64,${Buffer.from(
-//       imageResponse.data,
-//       "binary"
-//     ).toString("base64")}`;
+//       const imageResponse = await axios.post(
+//         `${baseURL}?api_key=${apiKey}&format=image&labels=on&confidence=0&max_predictions=20`,
+//         image,
+//         {
+//           headers: {
+//             "Content-Type": "application/x-www-form-urlencoded",
+//           },
+//           responseType: "arraybuffer",
+//         }
+//       );
+
+//       const base64AnnotatedImage = `data:image/jpeg;base64,${Buffer.from(
+//         imageResponse.data,
+//         "binary"
+//       ).toString("base64")}`;
+
+//       annotatedImages.push(base64AnnotatedImage);
+//       results.push(jsonResponse.data);
+//     }
 
 //     const detection = await DetectModel.create({
 //       plantName,
 //       description,
 //       status,
-//       image: base64AnnotatedImage,
-//       result: jsonResponse.data,
+//       images: annotatedImages, // ✅ now filled
+//       results,
 //     });
 
-//     res.status(201).json(detection);
+//     res.status(201).json({ message: "Detection created", data: detection });
 //   } catch (error) {
 //     console.error("Detection Error:", error.message);
 //     res.status(500).json({ error: "Detection failed", details: error.message });
@@ -104,12 +117,54 @@ const createDetection = async (req, res) => {
       results.push(jsonResponse.data);
     }
 
+    // Extract unique disease names
+    const diseaseSet = new Set();
+    results.forEach(result => {
+      result.predictions?.forEach(prediction => {
+        if (prediction.class) {
+          diseaseSet.add(prediction.class);
+        }
+      });
+    });
+
+    const diseaseNames = Array.from(diseaseSet);
+    const info = [];
+
+    for (const disease of diseaseNames) {
+      const messages = [
+        {
+          role: "system",
+          content: `You are Luntian, an assistant designed to support users in understanding and managing plant diseases. Provide a response strictly in JSON format with the following fields:
+          {
+            "diseaseDescription": "single string",
+            "plantsAffected": ["array", "of", "strings"],
+            "causesAndRiskFactors": ["array", "of", "strings"],
+            "treatmentAndManagement": ["array", "of", "strings"],
+            "importantNotes": "single string"
+          }`,
+        },
+        {
+          role: "user",
+          content: disease,
+        },
+      ];
+
+      const response = await openai.chat.completions.create({
+        model: "llama3-70b-8192",
+        messages,
+      });
+
+      const parsed = JSON.parse(response.choices[0].message.content);
+      info.push(parsed);
+    }
+
     const detection = await DetectModel.create({
       plantName,
       description,
-      status,
-      images: annotatedImages, // ✅ now filled
+      status, 
+      images: annotatedImages,
       results,
+      info,
     });
 
     res.status(201).json({ message: "Detection created", data: detection });
@@ -119,28 +174,84 @@ const createDetection = async (req, res) => {
   }
 };
 
+
 // const updateDetection = async (req, res) => {
 //   try {
 //     const { id } = req.params;
 //     const updatedData = req.body;
 
+//     // Fetch the document
 //     const updatedDetection = await DetectModel.findById(id);
 
 //     if (!updatedDetection) {
 //       return res.status(404).json({ error: "Detection not found" });
 //     }
 
+//     // If new images are provided, run them through Roboflow just like in createDetection
+//     if (
+//       updatedData.images &&
+//       Array.isArray(updatedData.images) &&
+//       updatedData.images.length > 0
+//     ) {
+//       const baseURL = process.env.ROBOFLOW_MODEL_URL;
+//       const apiKey = process.env.ROBOFLOW_API_KEY;
+
+//       const annotatedImages = [];
+//       const results = [];
+
+//       for (const image of updatedData.images) {
+//         const jsonResponse = await axios.post(
+//           `${baseURL}?api_key=${apiKey}&format=json`,
+//           image,
+//           {
+//             headers: {
+//               "Content-Type": "application/x-www-form-urlencoded",
+//             },
+//           }
+//         );
+
+//         const imageResponse = await axios.post(
+//           `${baseURL}?api_key=${apiKey}&format=image&labels=on&confidence=0&max_predictions=20`,
+//           image,
+//           {
+//             headers: {
+//               "Content-Type": "application/x-www-form-urlencoded",
+//             },
+//             responseType: "arraybuffer",
+//           }
+//         );
+
+//         const base64AnnotatedImage = `data:image/jpeg;base64,${Buffer.from(
+//           imageResponse.data,
+//           "binary"
+//         ).toString("base64")}`;
+
+//         annotatedImages.push(base64AnnotatedImage);
+//         results.push(jsonResponse.data);
+//       }
+
+//       updatedDetection.images = annotatedImages;
+//       updatedDetection.results = results;
+//     }
+
+//     // Update other fields except images and results
 //     Object.keys(updatedData).forEach((key) => {
-//       if (updatedData[key] !== updatedDetection[key]) {
+//       if (
+//         key !== "images" &&
+//         key !== "results" &&
+//         updatedData[key] !== updatedDetection[key]
+//       ) {
 //         updatedDetection[key] = updatedData[key];
 //       }
 //     });
 
-//     updatedDetection.__v = updatedDetection.__v + 1;
+//     // Save the document with automatic version handling
 //     await updatedDetection.save();
-//     res
-//       .status(200)
-//       .json({ message: "Update Detection Successfully", updatedDetection });
+
+//     res.status(200).json({
+//       message: "Update Detection Successfully",
+//       updatedDetection,
+//     });
 //   } catch (error) {
 //     console.error("Update Error:", error.message);
 //     res.status(500).json({ error: "Update failed", details: error.message });
@@ -152,14 +263,15 @@ const updateDetection = async (req, res) => {
     const { id } = req.params;
     const updatedData = req.body;
 
-    // Fetch the document
     const updatedDetection = await DetectModel.findById(id);
 
     if (!updatedDetection) {
       return res.status(404).json({ error: "Detection not found" });
     }
 
-    // If new images are provided, run them through Roboflow just like in createDetection
+    let info = updatedDetection.info; // fallback to existing info unless recalculated
+
+    // ✅ If new images are provided, re-process them
     if (
       updatedData.images &&
       Array.isArray(updatedData.images) &&
@@ -204,20 +316,63 @@ const updateDetection = async (req, res) => {
 
       updatedDetection.images = annotatedImages;
       updatedDetection.results = results;
+
+      // 🔍 Extract disease classes and fetch new info from LLM
+      const diseaseSet = new Set();
+      results.forEach(result => {
+        result.predictions?.forEach(pred => {
+          if (pred.class) diseaseSet.add(pred.class);
+        });
+      });
+
+      const diseaseNames = Array.from(diseaseSet);
+      info = [];
+
+      for (const disease of diseaseNames) {
+        const messages = [
+          {
+            role: "system",
+            content: `You are Luntian, an assistant designed to support users in understanding and managing plant diseases. Provide a response strictly in JSON format with the following fields:
+            {
+              "diseaseDescription": "single string",
+              "plantsAffected": ["array", "of", "strings"],
+              "causesAndRiskFactors": ["array", "of", "strings"],
+              "treatmentAndManagement": ["array", "of", "strings"],
+              "importantNotes": "single string"
+            }`,
+          },
+          { role: "user", content: disease },
+        ];
+
+        const response = await openai.chat.completions.create({
+          model: "llama3-70b-8192",
+          messages,
+        });
+
+        const parsed = JSON.parse(response.choices[0].message.content);
+        info.push(parsed);
+      }
     }
 
-    // Update other fields except images and results
+    // ✅ Update non-image fields
     Object.keys(updatedData).forEach((key) => {
-      if (
-        key !== "images" &&
-        key !== "results" &&
-        updatedData[key] !== updatedDetection[key]
-      ) {
-        updatedDetection[key] = updatedData[key];
+      if (key !== "images" && key !== "results" && key !== "info") {
+        if (key === "status" && typeof updatedData.status === "object") {
+          updatedDetection.status = {
+            isDeleted: updatedData.status.isDeleted ?? updatedDetection.status?.isDeleted ?? false,
+            isArchived: updatedData.status.isArchived ?? updatedDetection.status?.isArchived ?? false,
+          };
+        } else {
+          updatedDetection[key] = updatedData[key];
+        }
       }
     });
 
-    // Save the document with automatic version handling
+    // If info was recalculated, update it
+    if (info) {
+      updatedDetection.info = info;
+    }
+
     await updatedDetection.save();
 
     res.status(200).json({
@@ -229,6 +384,7 @@ const updateDetection = async (req, res) => {
     res.status(500).json({ error: "Update failed", details: error.message });
   }
 };
+
 
 const getAllDetection = async (req, res) => {
   try {
@@ -460,19 +616,6 @@ const permanentDelete = async (req, res) => {
 };
 
 
-const startLiveDetection = (req, res) => {
-  res.status(200).json({ message: "Live detection started" });
-};
-
-const stopLiveDetectionAPI = (req, res) => {
-  stopStreaming();
-  res.status(200).json({ message: "Live detection stopped" });
-};
-
-const getVideoFeed = (req, res) => {
-  streamLiveDetection(res);
-};
-
 
 
 module.exports = {
@@ -484,7 +627,4 @@ module.exports = {
   undoDeleteDetection,
   undoArchiveDetection,
   permanentDelete,
-  startLiveDetection,
-  stopLiveDetectionAPI,
-  getVideoFeed,
 };
