@@ -32,7 +32,7 @@ client_process = run_command("npm run dev", "./client")
 time.sleep(5)  # Give it time to start
 
 # Open the browser automatically
-web_url = "http://localhost:5173/luntian/"
+web_url = "http://localhost:5173/Luntian/"
 print(f"Opening {web_url} in browser...")
 webbrowser.open(web_url)
 

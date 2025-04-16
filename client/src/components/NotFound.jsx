@@ -1,7 +1,7 @@
 // src/Pages/NotFound.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import NOT_FOUND from "../assets/images/not_found.png";
+import NOT_FOUND from "../assets/Images/not_found.png";
 
 const NotFound = () => {
   return (

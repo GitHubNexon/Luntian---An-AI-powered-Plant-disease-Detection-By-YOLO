@@ -88,10 +88,16 @@ TOKEN_EXPIRATION=30d
 
 ### 📂 Ultralytics (`ultralytics/app/.env`)
 ```env
-MONGODB_URI=mongodb://127.0.0.1:27017/luntian
+MONGODB_URI=mongodb://0.0.0.0:27017/luntian_db
 SALT_ROUNDS=10
-SECRET_KEY=LUNTIAN_2025
+SECRET_KEY=luntian2025
 TOKEN_EXPIRATION=30d
+EMAIL_USER=example.email.com
+EMAIL_PASS=xxxx xxxx xxxx xxxx
+ROBOFLOW_API_KEY=xxxxxxxxxxxxxx
+ROBOFLOW_MODEL_URL=https://serverless.roboflow.com/<modelname>
+GROQ_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+CORS_ORIGINS=http://localhost:5173,http://localhost:3000,http://192.168.100.2:5173
 ```
 
 ---
