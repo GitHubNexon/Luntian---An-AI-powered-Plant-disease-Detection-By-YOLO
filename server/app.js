@@ -6,6 +6,9 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const path = require("path");
 const connectDB = require("./configs/db");
+const http = require("http");
+const { Server } = require("socket.io");
+const initSocket = require("./socket");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -35,6 +38,11 @@ app.use(
   })
 );
 
+// // Create an HTTP server
+// const server = http.createServer(app);
+// // Initialize Socket.IO with the server
+// const io = initSocket(server);
+
 app.use(express.json());
 app.get("/luntian/api", (req, res) => {
   res.send("LUNTIAN BACKEND IS RUNNING");
@@ -44,13 +52,14 @@ app.get("/luntian/api", (req, res) => {
 const authRoutes = require("./routes/authRoutes");
 const baseRoutes = require("./routes/baseRoutes");
 const userRoutes = require("./routes/userRoutes");
-const detectRoutes = require("./routes/detectRoutes")
+const detectRoutes = require("./routes/detectRoutes");
+const chatRoutes = require("./routes/chatRoutes");
 
 app.use("/luntian/api/auth", authRoutes);
 app.use("/luntian/api/user", userRoutes);
 app.use("/luntian/api/base", baseRoutes);
 app.use("/luntian/api/detect", detectRoutes);
-
+app.use("/luntian/api/chat", chatRoutes);
 
 //MongoDB connection
 connectDB();

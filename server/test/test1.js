@@ -1,8 +1,5 @@
-// require("dotenv").config();
-
-require("dotenv").config({ path: "../.env" }); // adjust path based on your structure
+require("dotenv").config({ path: "../.env" });
 const { OpenAI } = require("openai");
-const axios = require("axios");
 
 const openai = new OpenAI({
   baseURL: "https://api.groq.com/openai/v1",
@@ -25,30 +22,29 @@ async function getProgrammingResponse(question) {
     },
   ];
 
-  const model = "llama3-70b-8192"; 
+  const model = "llama3-70b-8192";
 
   try {
-    const res = await openai.chat.completions.create({
+    const stream = await openai.chat.completions.create({
       model,
       messages,
+      stream: true,
     });
 
-    console.log("✅ Response:\n", res.choices[0].message.content);
-    logTokenUsage(res);
-  } catch (error) {
-    console.error("❌ Request failed:", error.message);
-  }
-}
+    console.log("🟢 Streaming response:\n");
 
-function logTokenUsage(res) {
-  if (res.usage) {
-    const { prompt_tokens, completion_tokens, total_tokens } = res.usage;
-    console.log("\n🔍 Token Usage:");
-    console.log("Prompt tokens (input):", prompt_tokens);
-    console.log("Completion tokens (output):", completion_tokens);
-    console.log("Total tokens:", total_tokens);
-  } else {
-    console.log("\n⚠️ Token usage data not available in the response.");
+    let fullResponse = "";
+
+    for await (const chunk of stream) {
+      const content = chunk.choices?.[0]?.delta?.content || "";
+      process.stdout.write(content);
+      fullResponse += content;
+    }
+
+    console.log("\n\n✅ Full Response:\n", fullResponse);
+
+  } catch (error) {
+    console.error("❌ Streaming failed:", error.message);
   }
 }
 
