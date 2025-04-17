@@ -152,7 +152,7 @@ const ChatBox = ({ onClose }) => {
                       : "bg-white text-black border border-green-200"
                   }`}
                 >
-                  <div className="flex items-center space-x-2 mb-1">
+                  {/* <div className="flex items-center space-x-2 mb-1">
                     {message.role === "user" ? (
                       <>
                         <FaUser className="text-white" />
@@ -164,7 +164,7 @@ const ChatBox = ({ onClose }) => {
                         <span>{message.senderId.firstName}</span>
                       </>
                     )}
-                  </div>
+                  </div> */}
                   <div>
                     {message.role === "ai" && renderedMessages[message._id] ? (
                       <ReactMarkdown>
