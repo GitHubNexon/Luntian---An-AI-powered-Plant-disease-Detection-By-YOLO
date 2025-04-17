@@ -54,12 +54,14 @@ const baseRoutes = require("./routes/baseRoutes");
 const userRoutes = require("./routes/userRoutes");
 const detectRoutes = require("./routes/detectRoutes");
 const chatRoutes = require("./routes/chatRoutes");
+const externalApiRoutes = require("./routes/externalApiRoutes");
 
 app.use("/luntian/api/auth", authRoutes);
 app.use("/luntian/api/user", userRoutes);
 app.use("/luntian/api/base", baseRoutes);
 app.use("/luntian/api/detect", detectRoutes);
 app.use("/luntian/api/chat", chatRoutes);
+app.use("/luntian/api/external-api", externalApiRoutes);
 
 //MongoDB connection
 connectDB();
