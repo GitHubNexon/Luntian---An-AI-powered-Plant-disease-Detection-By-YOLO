@@ -41,7 +41,7 @@ const FloatingBar = () => {
     {
       path: "/monitoring",
       icon: <FaMagnifyingGlass />,
-      label: "monitoring",
+      label: "Monitoring",
       role: "mr",
     },
     { path: "/admin", icon: <FaUserShield />, label: "Admin", role: "ad" },
