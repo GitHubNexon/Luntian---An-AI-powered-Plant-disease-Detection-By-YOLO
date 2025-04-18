@@ -6,6 +6,7 @@ import { MdDashboard } from "react-icons/md";
 import LiveDetection from "../components/LiveDetection";
 import ModelInfo from "../sub-pages/ModelInfo";
 import LiveDetection2 from "../components/LiveDetection2";
+import Weather from "../components/Weather";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -62,7 +63,10 @@ const Dashboard = () => {
             title="Notifications"
             message="No notifications."
           />
-          <div className="-200 p-4 rounded text-center shadow-2xl cursor-pointer overflow-hidden relative transition-all duration-500 hover:translate-y-2 flex flex-col items-center justify-center gap-2 before:absolute before:w-full hover:before:top-0 before:duration-500 before:-top-1 before:h-1 before:bg-green-400"></div>
+          <div className="-200 p-4 rounded text-center shadow-2xl cursor-pointer overflow-hidden relative transition-all duration-500 hover:translate-y-2 flex flex-col items-center justify-center gap-2 before:absolute before:w-full hover:before:top-0 before:duration-500 before:-top-1 before:h-1 before:bg-green-400">
+          <Weather />
+
+          </div>
         </div>
         <section>
           <div className="flex item-center justify-start ">
