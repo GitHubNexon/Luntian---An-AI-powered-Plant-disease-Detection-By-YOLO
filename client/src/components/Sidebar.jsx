@@ -52,10 +52,10 @@ const Sidebar = () => {
 
   const menuItems = [
     {
-      path: "/detections",
+      path: "/monitoring",
       icon: <FaMagnifyingGlass />,
-      label: "detections",
-      role: "sd",
+      label: "monitoring",
+      role: "mr",
     },
     { path: "/admin", icon: <FaUserShield />, label: "Admin", role: "ad" },
     { path: "/settings", icon: <FaCog />, label: "Settings", role: "ss" },
