@@ -19,7 +19,7 @@ import Settings from "./pages/Settings";
 import Layout from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
 import Admin from "./pages/Admin";
-import Detections from "./pages/Detections";
+import Monitoring from "./pages/Monitoring";
 
 function App() {
   useEffect(() => {
@@ -51,11 +51,11 @@ function App() {
                 }
               />
               <Route
-                path="/detections"
+                path="/monitoring"
                 element={
-                  <ProtectedRoute requiredRole="sd">
+                  <ProtectedRoute requiredRole="mr">
                     <Layout>
-                      <Detections />
+                      <Monitoring />
                     </Layout>
                   </ProtectedRoute>
                 }

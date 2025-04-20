@@ -39,10 +39,10 @@ const FloatingBar = () => {
       role: null, // No role required for Dashboard
     },
     {
-      path: "/detections",
+      path: "/monitoring",
       icon: <FaMagnifyingGlass />,
-      label: "Detections",
-      role: "sd",
+      label: "Monitoring",
+      role: "mr",
     },
     { path: "/admin", icon: <FaUserShield />, label: "Admin", role: "ad" },
     { path: "/settings", icon: <FaCog />, label: "Settings", role: "ss" },

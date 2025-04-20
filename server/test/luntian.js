@@ -1,11 +1,17 @@
+// require("dotenv").config();
+
+require("dotenv").config({ path: "../.env" }); // adjust path based on your structure
 const { OpenAI } = require("openai");
+const axios = require("axios");
 
 const openai = new OpenAI({
   baseURL: "https://api.groq.com/openai/v1",
-  apiKey: "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",
+  apiKey: process.env.GROQ_API_KEY,
 });
 
-const userQuestion = `give me 20 questions about agriculture?`;
+console.log("GROQ API KEY:", process.env.GROQ_API_KEY);
+
+const userQuestion = `What are the key factors to consider when implementing a precision livestock farming system`;
 
 async function getProgrammingResponse(question) {
   const messages = [

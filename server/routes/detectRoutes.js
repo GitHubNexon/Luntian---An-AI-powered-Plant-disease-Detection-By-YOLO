@@ -9,7 +9,6 @@ const {
   undoDeleteDetection,
   undoArchiveDetection,
   permanentDelete,
-d,
 } = require("../controllers/detectController");
 const { authenticateToken } = require("../controllers/authController");
 
@@ -48,7 +47,5 @@ router.delete(
   authenticateToken,
   permanentDelete
 );
-
-
 
 module.exports = router;

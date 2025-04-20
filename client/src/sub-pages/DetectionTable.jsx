@@ -381,6 +381,7 @@ const DetectionTable = () => {
                 "Plant Name",
                 "Description",
                 "created At",
+                "created By",
                 "status",
                 "actions",
               ].map((header) => (
@@ -399,7 +400,7 @@ const DetectionTable = () => {
             </tr>
           </thead>
           {loading ? (
-            <SkeletonTableLoader rows={10} columns={9} duration={1.5} />
+            <SkeletonTableLoader rows={10} columns={8} duration={1.5} />
           ) : (
             <tbody>
               {detections.map((detection, index) => (
@@ -424,6 +425,11 @@ const DetectionTable = () => {
                     <td className="responsive-td">
                       {moment(detection.createdAt).format("MMM DD, YYYY")}
                     </td>
+                    <td className="responsive-td">
+                      {detection.createdBy.firstName}{" "}
+                      {detection.createdBy.lastName}
+                    </td>
+
                     <td className="px-6 py-4 space-x-2">
                       <span
                         className={`px-2 py-1 rounded-full text-xs ${

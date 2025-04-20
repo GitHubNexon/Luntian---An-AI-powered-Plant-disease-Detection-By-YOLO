@@ -20,15 +20,15 @@ async function insertDefaultValues() {
   try {
     // Default userTypes and accessTypes should be defined outside the if block
     const defaultUserTypes = [
-      { user: "Administrator", access: ["ad", "ss", "sd", "rp"] },
-      { user: "Agriculturist", access: ["ad", "ss", "sd", "rp"] },
-      { user: "Researcher", access: ["ad", "ss", "sd", "rp"] },
+      { user: "Administrator", access: ["ad", "ss", "mr", "rp"] },
+      { user: "Agriculturist", access: ["ad", "ss", "mr", "rp"] },
+      { user: "Researcher", access: ["ad", "ss", "mr", "rp"] },
     ];
 
     const defaultAccessTypes = [
       { code: "ad", access: "Administrator" },
       { code: "ss", access: "Settings" },
-      { code: "sd", access: "Detections" },
+      { code: "mr", access: "Monitoring" },
       { code: "rp", access: "Reports" },
     ];
 

@@ -37,6 +37,7 @@
     "onnxruntime-node": "^1.21.0",
     "openai": "^4.94.0",
     "sharp": "^0.34.1",
+    "socket.io": "^4.8.1",
     "uuid": "^11.1.0"
   }
 }
