@@ -10,11 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@tailwindcss/vite": "^4.0.14",
     "aos": "^2.3.4",
     "axios": "^1.8.4",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
+    "framer-motion": "^12.7.3",
     "html2canvas": "^1.4.1",
     "inferencejs": "^1.0.21",
     "lodash": "^4.17.21",
@@ -25,6 +27,7 @@
     "react-icons": "^5.5.0",
     "react-loading-skeleton": "^3.5.0",
     "react-markdown": "^10.1.0",
+    "react-parallax-tilt": "^1.7.291",
     "react-router-dom": "^7.4.0",
     "react-toastify": "^11.0.5",
     "react-type-animation": "^3.2.0",
