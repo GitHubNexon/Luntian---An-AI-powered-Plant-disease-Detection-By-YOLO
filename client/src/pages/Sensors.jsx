@@ -1,7 +1,12 @@
 import React from "react";
+import Soil from "../components/Soil";
 
 const Sensors = () => {
-  return <div>Sensors</div>;
+  return (
+    <div>
+      <Soil />
+    </div>
+  );
 };
 
 export default Sensors;
