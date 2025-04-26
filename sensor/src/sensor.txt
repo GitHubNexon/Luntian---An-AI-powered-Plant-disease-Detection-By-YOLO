@@ -1,0 +1,6 @@
+https://newbiely.com/tutorials/raspberry-pi/raspberry-pi-soil-moisture-sensor
+
+sudo apt-get update
+sudo apt-get install python3-rpi.gpio
+
+sudo pip install Adafruit-ADS1x15
