@@ -1,44 +1,51 @@
-"""
-This Raspberry Pi code was developed by newbiely.com
-This Raspberry Pi code is made available for public use without any restriction
-For comprehensive instructions and wiring diagrams, please visit:
-https://newbiely.com/tutorials/raspberry-pi/raspberry-pi-soil-moisture-sensor
-"""
-
-
 import time
-import Adafruit_ADS1x15
+import board
+import busio
+from adafruit_ads1x15.ads1115 import ADS1115
+from adafruit_ads1x15.analog_in import AnalogIn
 
-# Create an ADS1115 ADC object
-adc = Adafruit_ADS1x15.ADS1115()
+# Initialize I2C and ADS1115
+i2c = busio.I2C(board.SCL, board.SDA)
+ads = ADS1115(i2c)
+chan = AnalogIn(ads, 3)  # A3 channel
 
-# Set the gain to ±4.096V (adjust if needed)
-GAIN = 1
+def read_average(samples=10, delay=0.2):
+    readings = []
+    for _ in range(samples):
+        value = chan.value
+        readings.append(value)
+        print(f"  Reading: {value}")
+        time.sleep(delay)
+    avg = sum(readings) // len(readings)
+    print(f"  → Average Value: {avg}\n")
+    return avg
 
-# Single threshold for wet/dry classification (adjust as needed)
-THRESHOLD = 45000
+# Calibration phase
+print("=== Soil Moisture Sensor Calibration ===\n")
 
-# Function to determine the wet-dry level based on the soil moisture percentage
-def wet_dry_level(soil_moisture):
-    if soil_moisture > THRESHOLD:
-        return "DRY"
-    else:
-        return "WET"
+input("Step 1: Remove sensor from soil. Press Enter to measure DRY air value...")
+dry_reference = read_average()
 
-# Main loop to read the analog value from the soil moisture sensor
+input("Step 2: Insert sensor into wet soil or water. Press Enter to measure WET value...")
+wet_reference = read_average()
+
+threshold = (dry_reference + wet_reference) // 2
+print(f"Calibration complete!")
+print(f"  Dry Reference: {dry_reference}")
+print(f"  Wet Reference: {wet_reference}")
+print(f"  → Using threshold: {threshold}")
+print("\nStarting live soil monitoring...\n")
+
+# Live monitoring loop
+def wet_dry_level(soil_value):
+    return "DRY" if soil_value > threshold else "WET"
+
 try:
     while True:
-        # Read the raw analog value from channel A3
-        raw_value = adc.read_adc(3, gain=GAIN)
-
-        # Determine the wet-dry level based on the raw ADC value
-        level = wet_dry_level(raw_value)
-
-        # Print the results
-        print("Raw Value: {} \t Wet-Dry Level: {}".format(raw_value, level))
-
-        # Add a delay between readings (adjust as needed)
+        raw_value = chan.value
+        status = wet_dry_level(raw_value)
+        print(f"Raw Value: {raw_value} \t Wet-Dry Level: {status}")
         time.sleep(1)
 
 except KeyboardInterrupt:
-    print("\nExiting the program.")
+    print("\nExiting the program. Bye!")

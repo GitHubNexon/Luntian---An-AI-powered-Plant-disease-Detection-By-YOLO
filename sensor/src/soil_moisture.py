@@ -1,34 +1,24 @@
-"""
-This Raspberry Pi code was developed by newbiely.com
-This Raspberry Pi code is made available for public use without any restriction
-For comprehensive instructions and wiring diagrams, please visit:
-https://newbiely.com/tutorials/raspberry-pi/raspberry-pi-soil-moisture-sensor
-"""
-
-
 import time
-import Adafruit_ADS1x15
+import board
+import busio
+from adafruit_ads1x15.ads1115 import ADS1115
+from adafruit_ads1x15.analog_in import AnalogIn
 
-# Create an ADS1115 ADC object
-adc = Adafruit_ADS1x15.ADS1115()
+# Initialize I2C
+i2c = busio.I2C(board.SCL, board.SDA)
 
-# Set the gain to ±4.096V (adjust if needed)
-GAIN = 1
+# Create the ADC object
+ads = ADS1115(i2c)
 
-# Main loop to read the analog value from the soil moisture sensor and print the raw ADC value
+# Read from analog channel A3 (use index 3)
+chan = AnalogIn(ads, 3)
+
+# Main loop
 try:
     while True:
-        # Read the raw analog value from channel A3
-        raw_value = adc.read_adc(3, gain=GAIN)
-
-        # Print the raw ADC value
-        print("Raw Value: {}".format(raw_value))
-
-        # Add a delay between readings (adjust as needed)
+        print("Soil Moisture Raw Value: {:>5}".format(chan.value))
+        print("Soil Moisture Voltage: {:.2f} V".format(chan.voltage))
         time.sleep(1)
 
 except KeyboardInterrupt:
     print("\nExiting the program.")
-
-# python3 soil_moisture.py
-
