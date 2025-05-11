@@ -20,3 +20,5 @@ app.add_middleware(
 app.include_router(sensor_routes.router)
 
 #uvicorn app:app --reload --host 0.0.0.0 --port 8000
+#uvicorn app:app --reload --host 0.0.0.0 --port 8000 --timeout-keep-alive 60
+

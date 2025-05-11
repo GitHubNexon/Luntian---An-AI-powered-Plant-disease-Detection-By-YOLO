@@ -1,39 +1,32 @@
-import os
 import subprocess
-import time
-import webbrowser
-import sys
 
-# Detect OS
-is_windows = sys.platform.startswith("win")
+def run_command(command, cwd=None):
+    try:
+        print(f"Running: {command}")
+        result = subprocess.run(command, shell=True, cwd=cwd, check=True, text=True)
+        print("✔️ Success\n")
+    except subprocess.CalledProcessError as e:
+        print(f"❌ Error: {e}\n")
 
-# Function to open a new terminal and run a command
-def run_command(command, work_dir):
-    if is_windows:
-        return subprocess.Popen(f'start cmd /k "{command}"', cwd=work_dir, shell=True)
-    else:
-        return subprocess.Popen(f'gnome-terminal -- bash -c "{command}; exec bash"', cwd=work_dir, shell=True)
+# Step 1: Nginx commands
+run_command("sudo nginx -t")
+run_command("sudo systemctl restart nginx")
 
-# Start Ultralytics (Python API)
-print("Starting Ultralytics service...")
-ultralytics_process = run_command(r"venv\Scripts\activate && python app/app.py" if is_windows else "source venv/bin/activate && python app/app.py", "./ultralytics")
+# Step 2: Start Node.js app with PM2
+node_project_path = "/home/ubuntu-pi/PROJECTS/Luntian---An-AI-powered-Plant-disease-Detection-By-YOLO/server"
+run_command("pm2 start app.js --name luntian", cwd=node_project_path)
 
+# Step 3: Start FastAPI app with PM2
+fastapi_project_path = "/home/ubuntu-pi/PROJECTS/Luntian---An-AI-powered-Plant-disease-Detection-By-YOLO/sensor"
+fastapi_command = (
+    "pm2 start uvicorn --name fastapi-sensor --interpreter ./venv/bin/python3 -- "
+    "app:app --reload --host 0.0.0.0 --port 8000 --timeout-keep-alive 60"
+)
+run_command(fastapi_command, cwd=fastapi_project_path)
 
+# Step 4: PM2 startup and save
+run_command("pm2 startup")
+run_command("pm2 save")
+run_command("pm2 list")
 
-# Start Server
-print("Starting Node.js server...")
-server_process = run_command("npm run dev", "./server")
-
-# Start Client
-print("Starting React client...")
-client_process = run_command("npm run dev", "./client")
-
-# Wait for the client to be ready
-time.sleep(5)  # Give it time to start
-
-# Open the browser automatically
-web_url = "http://localhost:5173/Luntian/"
-print(f"Opening {web_url} in browser...")
-webbrowser.open(web_url)
-
-print("All services started successfully.")
+#python3 run.py

@@ -1,0 +1,71 @@
+
+sudo cp -r ~/PROJECTS/Luntian---An-AI-powered-Plant-disease-Detection-By-YOLO/client/dist/* /var/www/html/Luntian/
+
+sudo ln -s /etc/nginx/sites-available/nginx-site /etc/nginx/sites-enabled/
+
+
+sudo nano /etc/nginx/sites-available/nginx-site 
+
+sudo nginx -t
+sudo systemctl restart nginx
+sudo systemctl status nginx
+
+
+server {
+    listen 80;
+    server_name localhost;
+
+    # React frontend (static assets)
+    location /Luntian/ {
+        root /var/www/html;
+        try_files $uri $uri/ /Luntian/index.html;
+    }
+
+    location /Luntian/assets/ {
+        root /var/www/html;
+        try_files $uri =404;
+    }
+
+    # API Proxy to Node.js (Express) backend on port 3001
+    location /luntian/api/ {
+        proxy_pass http://localhost:3001/luntian/api/;  # Node.js backend (Express) on port 3001
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    # API Proxy to FastAPI backend on port 8000
+    location /luntian/api/sensor-stream {
+        proxy_pass http://localhost:8000/luntian/api/sensor-stream;  # FastAPI backend on port 8000
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+
+for fast api 
+
+
+cd /PROJECTS/Luntian---An-AI-powered-Plant-disease-Detection-By-YOLO/sensor
+
+pm2 start uvicorn --name fastapi-sensor --interpreter ./venv/bin/python3 -- \
+  app:app --reload --host 0.0.0.0 --port 8000 --timeout-keep-alive 60
+
+
+
+
+pm2 start app.js --name luntian
+
+
+
+pm2 startup
+pm2 save
+
