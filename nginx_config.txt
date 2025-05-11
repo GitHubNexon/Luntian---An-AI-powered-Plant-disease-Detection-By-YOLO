@@ -1,0 +1,17 @@
+server {
+    listen 80;
+    server_name localhost;
+
+    # Static Frontend
+    location /BioNova/ {
+        root html;
+        index index.html;
+        try_files $uri $uri/ /BioNova/index.html;
+    }
+
+    location /BioNova/assets/ {
+        root html;
+        try_files $uri $uri/ =404;
+    }
+  
+}
