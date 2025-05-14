@@ -11,12 +11,12 @@ import ardian from '../../assets/Images/DesignImages/ardian.png';
 const teamMembers = [
   {
     name: 'John Mark L. Pulmano',
-    role: 'Team Leader',
+    role: 'Head Programmer',
     img: john,
   },
   {
     name: 'Ardian Alpino',
-    role: 'Documentation Specialist',
+    role: 'Team Leader',
     img: ardian,
   },
   {
@@ -31,7 +31,7 @@ const teamMembers = [
   },
   {
     name: 'Marlon G. Rinos',
-    role: 'Support Engineer',
+    role: 'Documentation Specialist',
     img: marlon,
   },
 ];
