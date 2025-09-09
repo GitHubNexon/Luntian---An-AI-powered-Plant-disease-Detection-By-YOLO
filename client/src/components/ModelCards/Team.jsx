@@ -5,17 +5,19 @@ import Tilt from 'react-parallax-tilt';
 import john from '../../assets/Images/DesignImages/john.png';
 import marlon from '../../assets/Images/DesignImages/marlon.png';
 import arielle from '../../assets/Images/DesignImages/arielle.png';
+import suma from '../../assets/Images/DesignImages/Suma.png';
+import ardian from '../../assets/Images/DesignImages/ardian.png';
 
 const teamMembers = [
   {
     name: 'John Mark L. Pulmano',
-    role: 'Team Leader',
+    role: 'Head Programmer',
     img: john,
   },
   {
     name: 'Ardian Alpino',
-    role: 'Documentation Specialist',
-    img: '/images/ardian.jpg',
+    role: 'Team Leader',
+    img: ardian,
   },
   {
     name: 'Princess Arielle M. Perez',
@@ -25,11 +27,11 @@ const teamMembers = [
   {
     name: 'Kenneth Suma',
     role: 'Device Components Manager',
-    img: '/images/kenneth.jpg',
+    img: suma,
   },
   {
     name: 'Marlon G. Rinos',
-    role: 'Support Engineer',
+    role: 'Documentation Specialist',
     img: marlon,
   },
 ];
