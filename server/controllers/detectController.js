@@ -88,7 +88,8 @@ const createDetection = async (req, res) => {
       ];
 
       const response = await openai.chat.completions.create({
-        model: "llama3-70b-8192",
+        // model: "llama3-70b-8192",
+        model: process.env.LLM_MODEL,
         messages,
       });
 
@@ -200,7 +201,8 @@ const updateDetection = async (req, res) => {
         ];
 
         const response = await openai.chat.completions.create({
-          model: "llama3-70b-8192",
+          // model: "llama3-70b-8192",
+          model: process.env.LLM_MODEL,
           messages,
         });
 

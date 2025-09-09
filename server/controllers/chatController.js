@@ -35,7 +35,8 @@ const createConversation = async (req, res) => {
     },
   ];
 
-  const model = "llama3-70b-8192";
+  // const model = "llama3-70b-8192";
+  const model = process.env.LLM_MODEL
   let aiResponse = "";
 
   try {
